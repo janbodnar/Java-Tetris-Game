@@ -16,8 +16,9 @@ import com.zetcode.Shape.Tetrominoe;
 public class Board extends JPanel 
         implements ActionListener {
 
-    private final int BoardWidth = 10;
-    private final int BoardHeight = 22;
+    private final int BOARD_WIDTH = 10;
+    private final int BOARD_HEIGHT = 22;
+    private final int DELAY = 400;
 
     private Timer timer;
     private boolean isFallingFinished = false;
@@ -39,11 +40,11 @@ public class Board extends JPanel
         
        setFocusable(true);
        curPiece = new Shape();
-       timer = new Timer(400, this);
+       timer = new Timer(DELAY, this);
        timer.start(); 
 
        statusbar =  parent.getStatusBar();
-       board = new Tetrominoe[BoardWidth * BoardHeight];
+       board = new Tetrominoe[BOARD_WIDTH * BOARD_HEIGHT];
        addKeyListener(new TAdapter());
        clearBoard();          
     }
@@ -61,9 +62,9 @@ public class Board extends JPanel
         }
     }
 
-    private int squareWidth() { return (int) getSize().getWidth() / BoardWidth; }
-    private int squareHeight() { return (int) getSize().getHeight() / BoardHeight; }
-    private Tetrominoe shapeAt(int x, int y) { return board[(y * BoardWidth) + x]; }
+    private int squareWidth() { return (int) getSize().getWidth() / BOARD_WIDTH; }
+    private int squareHeight() { return (int) getSize().getHeight() / BOARD_HEIGHT; }
+    private Tetrominoe shapeAt(int x, int y) { return board[(y * BOARD_WIDTH) + x]; }
 
 
     public void start()  {
@@ -103,13 +104,13 @@ public class Board extends JPanel
     private void doDrawing(Graphics g) {
         
         Dimension size = getSize();
-        int boardTop = (int) size.getHeight() - BoardHeight * squareHeight();
+        int boardTop = (int) size.getHeight() - BOARD_HEIGHT * squareHeight();
 
-        for (int i = 0; i < BoardHeight; ++i) {
+        for (int i = 0; i < BOARD_HEIGHT; ++i) {
             
-            for (int j = 0; j < BoardWidth; ++j) {
+            for (int j = 0; j < BOARD_WIDTH; ++j) {
                 
-                Tetrominoe shape = shapeAt(j, BoardHeight - i - 1);
+                Tetrominoe shape = shapeAt(j, BOARD_HEIGHT - i - 1);
                 
                 if (shape != Tetrominoe.NoShape)
                     drawSquare(g, 0 + j * squareWidth(),
@@ -124,7 +125,7 @@ public class Board extends JPanel
                 int x = curX + curPiece.x(i);
                 int y = curY - curPiece.y(i);
                 drawSquare(g, 0 + x * squareWidth(),
-                           boardTop + (BoardHeight - y - 1) * squareHeight(),
+                           boardTop + (BOARD_HEIGHT - y - 1) * squareHeight(),
                            curPiece.getShape());
             }
         }        
@@ -160,7 +161,7 @@ public class Board extends JPanel
 
     private void clearBoard() {
         
-        for (int i = 0; i < BoardHeight * BoardWidth; ++i)
+        for (int i = 0; i < BOARD_HEIGHT * BOARD_WIDTH; ++i)
             board[i] = Tetrominoe.NoShape;
     }
 
@@ -170,7 +171,7 @@ public class Board extends JPanel
             
             int x = curX + curPiece.x(i);
             int y = curY - curPiece.y(i);
-            board[(y * BoardWidth) + x] = curPiece.getShape();
+            board[(y * BOARD_WIDTH) + x] = curPiece.getShape();
         }
 
         removeFullLines();
@@ -182,8 +183,8 @@ public class Board extends JPanel
     private void newPiece()  {
         
         curPiece.setRandomShape();
-        curX = BoardWidth / 2 + 1;
-        curY = BoardHeight - 1 + curPiece.minY();
+        curX = BOARD_WIDTH / 2 + 1;
+        curY = BOARD_HEIGHT - 1 + curPiece.minY();
 
         if (!tryMove(curPiece, curX, curY)) {
             
@@ -201,7 +202,7 @@ public class Board extends JPanel
             int x = newX + newPiece.x(i);
             int y = newY - newPiece.y(i);
             
-            if (x < 0 || x >= BoardWidth || y < 0 || y >= BoardHeight)
+            if (x < 0 || x >= BOARD_WIDTH || y < 0 || y >= BOARD_HEIGHT)
                 return false;
             
             if (shapeAt(x, y) != Tetrominoe.NoShape)
@@ -221,10 +222,10 @@ public class Board extends JPanel
         
         int numFullLines = 0;
 
-        for (int i = BoardHeight - 1; i >= 0; --i) {
+        for (int i = BOARD_HEIGHT - 1; i >= 0; --i) {
             boolean lineIsFull = true;
 
-            for (int j = 0; j < BoardWidth; ++j) {
+            for (int j = 0; j < BOARD_WIDTH; ++j) {
                 if (shapeAt(j, i) == Tetrominoe.NoShape) {
                     lineIsFull = false;
                     break;
@@ -233,9 +234,9 @@ public class Board extends JPanel
 
             if (lineIsFull) {
                 ++numFullLines;
-                for (int k = i; k < BoardHeight - 1; ++k) {
-                    for (int j = 0; j < BoardWidth; ++j)
-                         board[(k * BoardWidth) + j] = shapeAt(j, k + 1);
+                for (int k = i; k < BOARD_HEIGHT - 1; ++k) {
+                    for (int j = 0; j < BOARD_WIDTH; ++j)
+                         board[(k * BOARD_WIDTH) + j] = shapeAt(j, k + 1);
                 }
             }
         }
