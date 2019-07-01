@@ -25,7 +25,7 @@ public class Tetris extends JFrame {
         statusbar = new JLabel(" 0");
         add(statusbar, BorderLayout.SOUTH);
 
-        Board board = new Board(this);
+        var board = new Board(this);
         add(board);
         board.start();
 
@@ -35,7 +35,7 @@ public class Tetris extends JFrame {
         setLocationRelativeTo(null);
     }
 
-    public JLabel getStatusBar() {
+    JLabel getStatusBar() {
 
         return statusbar;
     }
@@ -44,7 +44,7 @@ public class Tetris extends JFrame {
 
         EventQueue.invokeLater(() -> {
 
-            Tetris game = new Tetris();
+            var game = new Tetris();
             game.setVisible(true);
         });
     }
