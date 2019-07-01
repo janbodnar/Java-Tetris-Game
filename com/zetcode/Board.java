@@ -36,15 +36,13 @@ public class Board extends JPanel implements ActionListener {
     private void initBoard(Tetris parent) {
 
         setFocusable(true);
-        curPiece = new Shape();
         int DELAY = 400;
         timer = new Timer(DELAY, this);
-        timer.start();
+        curPiece = new Shape();
 
-        statusbar =  parent.getStatusBar();
+        statusbar = parent.getStatusBar();
         board = new Tetrominoe[BOARD_WIDTH * BOARD_HEIGHT];
         addKeyListener(new TAdapter());
-        clearBoard();
     }
 
     @Override
@@ -60,14 +58,25 @@ public class Board extends JPanel implements ActionListener {
         }
     }
 
-    private int squareWidth() { return (int) getSize().getWidth() / BOARD_WIDTH; }
-    private int squareHeight() { return (int) getSize().getHeight() / BOARD_HEIGHT; }
-    private Tetrominoe shapeAt(int x, int y) { return board[(y * BOARD_WIDTH) + x]; }
+    private int squareWidth() {
 
-    void start()  {
+        return (int) getSize().getWidth() / BOARD_WIDTH;
+    }
+
+    private int squareHeight() {
+
+        return (int) getSize().getHeight() / BOARD_HEIGHT;
+    }
+
+    private Tetrominoe shapeAt(int x, int y) {
+
+        return board[(y * BOARD_WIDTH) + x];
+    }
+
+    void start() {
 
         if (isPaused) {
-            
+
             return;
         }
 
@@ -80,7 +89,7 @@ public class Board extends JPanel implements ActionListener {
         timer.start();
     }
 
-    private void pause()  {
+    private void pause() {
 
         if (!isStarted) {
 
@@ -157,7 +166,7 @@ public class Board extends JPanel implements ActionListener {
         pieceDropped();
     }
 
-    private void oneLineDown()  {
+    private void oneLineDown() {
 
         if (!tryMove(curPiece, curX, curY - 1)) {
 
@@ -190,7 +199,7 @@ public class Board extends JPanel implements ActionListener {
         }
     }
 
-    private void newPiece()  {
+    private void newPiece() {
 
         curPiece.setRandomShape();
         curX = BOARD_WIDTH / 2 + 1;
@@ -201,7 +210,9 @@ public class Board extends JPanel implements ActionListener {
             curPiece.setShape(Tetrominoe.NoShape);
             timer.stop();
             isStarted = false;
-            statusbar.setText("game over");
+
+            var msg = String.format("Game over. Score: %d", numLinesRemoved);
+            statusbar.setText(msg);
         }
     }
 
@@ -269,9 +280,9 @@ public class Board extends JPanel implements ActionListener {
         }
     }
 
-    private void drawSquare(Graphics g, int x, int y, Tetrominoe shape)  {
+    private void drawSquare(Graphics g, int x, int y, Tetrominoe shape) {
 
-        Color colors[] = { new Color(0, 0, 0), new Color(204, 102, 102),
+        Color colors[] = {new Color(0, 0, 0), new Color(204, 102, 102),
                 new Color(102, 204, 102), new Color(102, 102, 204),
                 new Color(204, 204, 102), new Color(204, 102, 204),
                 new Color(102, 204, 204), new Color(218, 170, 0)
