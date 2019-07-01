@@ -109,7 +109,7 @@ public class Shape {
         var result = new Shape();
         result.pieceShape = pieceShape;
 
-        for (int i = 0; i < 4; ++i) {
+        for (int i = 0; i < 4; i++) {
 
             result.setX(i, y(i));
             result.setY(i, -x(i));
@@ -128,7 +128,7 @@ public class Shape {
         var result = new Shape();
         result.pieceShape = pieceShape;
 
-        for (int i = 0; i < 4; ++i) {
+        for (int i = 0; i < 4; i++) {
 
             result.setX(i, -y(i));
             result.setY(i, x(i));
