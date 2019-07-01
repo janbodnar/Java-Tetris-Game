@@ -123,9 +123,9 @@ public class Board extends JPanel implements ActionListener {
         var size = getSize();
         int boardTop = (int) size.getHeight() - BOARD_HEIGHT * squareHeight();
 
-        for (int i = 0; i < BOARD_HEIGHT; ++i) {
+        for (int i = 0; i < BOARD_HEIGHT; i++) {
 
-            for (int j = 0; j < BOARD_WIDTH; ++j) {
+            for (int j = 0; j < BOARD_WIDTH; j++) {
 
                 Tetrominoe shape = shapeAt(j, BOARD_HEIGHT - i - 1);
 
@@ -139,7 +139,7 @@ public class Board extends JPanel implements ActionListener {
 
         if (curPiece.getShape() != Tetrominoe.NoShape) {
 
-            for (int i = 0; i < 4; ++i) {
+            for (int i = 0; i < 4; i++) {
 
                 int x = curX + curPiece.x(i);
                 int y = curY - curPiece.y(i);
@@ -186,7 +186,7 @@ public class Board extends JPanel implements ActionListener {
 
     private void pieceDropped() {
 
-        for (int i = 0; i < 4; ++i) {
+        for (int i = 0; i < 4; i++) {
 
             int x = curX + curPiece.x(i);
             int y = curY - curPiece.y(i);
@@ -220,7 +220,7 @@ public class Board extends JPanel implements ActionListener {
 
     private boolean tryMove(Shape newPiece, int newX, int newY) {
 
-        for (int i = 0; i < 4; ++i) {
+        for (int i = 0; i < 4; i++) {
 
             int x = newX + newPiece.x(i);
             int y = newY - newPiece.y(i);
@@ -253,7 +253,7 @@ public class Board extends JPanel implements ActionListener {
 
             boolean lineIsFull = true;
 
-            for (int j = 0; j < BOARD_WIDTH; ++j) {
+            for (int j = 0; j < BOARD_WIDTH; j++) {
 
                 if (shapeAt(j, i) == Tetrominoe.NoShape) {
                     lineIsFull = false;
@@ -266,7 +266,7 @@ public class Board extends JPanel implements ActionListener {
                 ++numFullLines;
 
                 for (int k = i; k < BOARD_HEIGHT - 1; ++k) {
-                    for (int j = 0; j < BOARD_WIDTH; ++j)
+                    for (int j = 0; j < BOARD_WIDTH; j++)
                         board[(k * BOARD_WIDTH) + j] = shapeAt(j, k + 1);
                 }
             }
