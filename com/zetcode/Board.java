@@ -178,7 +178,7 @@ public class Board extends JPanel implements ActionListener {
 
     private void clearBoard() {
 
-        for (int i = 0; i < BOARD_HEIGHT * BOARD_WIDTH; ++i) {
+        for (int i = 0; i < BOARD_HEIGHT * BOARD_WIDTH; i++) {
 
             board[i] = Tetrominoe.NoShape;
         }
