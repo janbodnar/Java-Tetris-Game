@@ -249,13 +249,14 @@ public class Board extends JPanel implements ActionListener {
 
         int numFullLines = 0;
 
-        for (int i = BOARD_HEIGHT - 1; i >= 0; --i) {
+        for (int i = BOARD_HEIGHT - 1; i >= 0; i--) {
 
             boolean lineIsFull = true;
 
             for (int j = 0; j < BOARD_WIDTH; j++) {
 
                 if (shapeAt(j, i) == Tetrominoe.NoShape) {
+
                     lineIsFull = false;
                     break;
                 }
@@ -263,11 +264,12 @@ public class Board extends JPanel implements ActionListener {
 
             if (lineIsFull) {
 
-                ++numFullLines;
+                numFullLines++;
 
-                for (int k = i; k < BOARD_HEIGHT - 1; ++k) {
-                    for (int j = 0; j < BOARD_WIDTH; j++)
+                for (int k = i; k < BOARD_HEIGHT - 1; k++) {
+                    for (int j = 0; j < BOARD_WIDTH; j++) {
                         board[(k * BOARD_WIDTH) + j] = shapeAt(j, k + 1);
+                        }
                 }
             }
         }
@@ -275,10 +277,10 @@ public class Board extends JPanel implements ActionListener {
         if (numFullLines > 0) {
 
             numLinesRemoved += numFullLines;
+
             statusbar.setText(String.valueOf(numLinesRemoved));
             isFallingFinished = true;
             curPiece.setShape(Tetrominoe.NoShape);
-            repaint();
         }
     }
 
