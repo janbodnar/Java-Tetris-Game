@@ -122,9 +122,11 @@ public class Board extends JPanel implements ActionListener {
 
                 Tetrominoe shape = shapeAt(j, BOARD_HEIGHT - i - 1);
 
-                if (shape != Tetrominoe.NoShape)
+                if (shape != Tetrominoe.NoShape) {
+
                     drawSquare(g, j * squareWidth(),
                             boardTop + i * squareHeight(), shape);
+                }
             }
         }
 
