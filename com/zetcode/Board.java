@@ -111,6 +111,13 @@ public class Board extends JPanel implements ActionListener {
         repaint();
     }
 
+    @Override
+    public void paintComponent(Graphics g) {
+
+        super.paintComponent(g);
+        doDrawing(g);
+    }
+
     private void doDrawing(Graphics g) {
 
         var size = getSize();
@@ -142,13 +149,6 @@ public class Board extends JPanel implements ActionListener {
                         curPiece.getShape());
             }
         }
-    }
-
-    @Override
-    public void paintComponent(Graphics g) {
-
-        super.paintComponent(g);
-        doDrawing(g);
     }
 
     private void dropDown() {
