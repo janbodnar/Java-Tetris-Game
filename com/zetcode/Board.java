@@ -6,14 +6,12 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import java.awt.Color;
 import java.awt.Graphics;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.util.Timer;
 import java.util.TimerTask;
 
-public class Board extends JPanel implements ActionListener {
+public class Board extends JPanel {
 
     private final int BOARD_WIDTH = 10;
     private final int BOARD_HEIGHT = 22;
@@ -41,19 +39,6 @@ public class Board extends JPanel implements ActionListener {
         setFocusable(true);
         statusbar = parent.getStatusBar();
         addKeyListener(new TAdapter());
-    }
-
-    @Override
-    public void actionPerformed(ActionEvent e) {
-
-        if (isFallingFinished) {
-
-            isFallingFinished = false;
-            newPiece();
-        } else {
-
-            oneLineDown();
-        }
     }
 
     private int squareWidth() {
@@ -104,12 +89,9 @@ public class Board extends JPanel implements ActionListener {
 
         if (isPaused) {
 
-            timer.cancel();
             statusbar.setText("paused");
         } else {
 
-            timer.scheduleAtFixedRate(new ScheduleTask(),
-                    INITIAL_DELAY, PERIOD_INTERVAL);
             statusbar.setText(String.valueOf(numLinesRemoved));
         }
 
@@ -357,20 +339,10 @@ public class Board extends JPanel implements ActionListener {
 
             int keycode = e.getKeyCode();
 
-            if (keycode == KeyEvent.VK_P) {
-
-                pause();
-                return;
-            }
-
-            if (isPaused) {
-
-                return;
-            }
-
             // Java 12 switch expressions
             switch (keycode) {
 
+                case KeyEvent.VK_P -> pause();
                 case KeyEvent.VK_LEFT -> tryMove(curPiece, curX - 1, curY);
                 case KeyEvent.VK_RIGHT -> tryMove(curPiece, curX + 1, curY);
                 case KeyEvent.VK_DOWN -> tryMove(curPiece.rotateRight(), curX, curY);
