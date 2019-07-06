@@ -58,11 +58,6 @@ public class Board extends JPanel {
 
     void start() {
 
-        if (isPaused) {
-
-            return;
-        }
-
         isStarted = true;
         isFallingFinished = false;
         numLinesRemoved = 0;
@@ -79,11 +74,6 @@ public class Board extends JPanel {
     }
 
     private void pause() {
-
-        if (!isStarted) {
-
-            return;
-        }
 
         isPaused = !isPaused;
 
@@ -149,7 +139,7 @@ public class Board extends JPanel {
                 break;
             }
 
-            --newY;
+            newY--;
         }
 
         pieceDropped();
