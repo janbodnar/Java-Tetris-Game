@@ -20,7 +20,6 @@ public class Board extends JPanel {
 
     private Timer timer;
     private boolean isFallingFinished = false;
-    private boolean isStarted = false;
     private boolean isPaused = false;
     private int numLinesRemoved = 0;
     private int curX = 0;
@@ -58,7 +57,6 @@ public class Board extends JPanel {
 
     void start() {
 
-        isStarted = true;
         isFallingFinished = false;
         numLinesRemoved = 0;
 
@@ -188,7 +186,6 @@ public class Board extends JPanel {
 
             curPiece.setShape(Tetrominoe.NoShape);
             timer.cancel();
-            isStarted = false;
 
             var msg = String.format("Game over. Score: %d", numLinesRemoved);
             statusbar.setText(msg);
@@ -322,7 +319,7 @@ public class Board extends JPanel {
         @Override
         public void keyPressed(KeyEvent e) {
 
-            if (!isStarted || curPiece.getShape() == Tetrominoe.NoShape) {
+            if (curPiece.getShape() == Tetrominoe.NoShape) {
 
                 return;
             }
