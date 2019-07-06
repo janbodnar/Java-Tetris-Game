@@ -306,7 +306,6 @@ public class Board extends JPanel implements ActionListener {
                 x + squareWidth() - 1, y + squareHeight() - 1);
         g.drawLine(x + squareWidth() - 1, y + squareHeight() - 1,
                 x + squareWidth() - 1, y + 1);
-
     }
 
     class TAdapter extends KeyAdapter {
@@ -321,7 +320,7 @@ public class Board extends JPanel implements ActionListener {
 
             int keycode = e.getKeyCode();
 
-            if (keycode == 'P') {
+            if (keycode == KeyEvent.VK_P) {
 
                 pause();
                 return;
@@ -332,31 +331,15 @@ public class Board extends JPanel implements ActionListener {
                 return;
             }
 
+            // Java 12 switch expressions
             switch (keycode) {
 
-                case KeyEvent.VK_LEFT:
-                    tryMove(curPiece, curX - 1, curY);
-                    break;
-
-                case KeyEvent.VK_RIGHT:
-                    tryMove(curPiece, curX + 1, curY);
-                    break;
-
-                case KeyEvent.VK_DOWN:
-                    tryMove(curPiece.rotateRight(), curX, curY);
-                    break;
-
-                case KeyEvent.VK_UP:
-                    tryMove(curPiece.rotateLeft(), curX, curY);
-                    break;
-
-                case KeyEvent.VK_SPACE:
-                    dropDown();
-                    break;
-
-                case KeyEvent.VK_D:
-                    oneLineDown();
-                    break;
+                case KeyEvent.VK_LEFT -> tryMove(curPiece, curX - 1, curY);
+                case KeyEvent.VK_RIGHT -> tryMove(curPiece, curX + 1, curY);
+                case KeyEvent.VK_DOWN ->  tryMove(curPiece.rotateRight(), curX, curY);
+                case KeyEvent.VK_UP -> tryMove(curPiece.rotateLeft(), curX, curY);
+                case KeyEvent.VK_SPACE -> dropDown();
+                case KeyEvent.VK_D -> oneLineDown();
             }
         }
     }
