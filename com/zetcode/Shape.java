@@ -10,8 +10,7 @@ public class Shape {
     }
 
     private Tetrominoe pieceShape;
-    private int coords[][];
-    private int[][][] coordsTable;
+    private int[][] coords;
 
     public Shape() {
 
@@ -21,7 +20,7 @@ public class Shape {
 
     void setShape(Tetrominoe shape) {
 
-        coordsTable = new int[][][] {
+        int[][][] coordsTable = new int[][][]{
                 {{0, 0}, {0, 0}, {0, 0}, {0, 0}},
                 {{0, -1}, {0, 0}, {-1, 0}, {-1, 1}},
                 {{0, -1}, {0, 0}, {1, 0}, {1, 1}},
