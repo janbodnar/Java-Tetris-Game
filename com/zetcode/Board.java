@@ -4,18 +4,21 @@ import com.zetcode.Shape.Tetrominoe;
 
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.Timer;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class Board extends JPanel implements ActionListener {
 
     private final int BOARD_WIDTH = 10;
     private final int BOARD_HEIGHT = 22;
+    private final int INITIAL_DELAY = 100;
+    private final int PERIOD_INTERVAL = 300;
 
     private Timer timer;
     private boolean isFallingFinished = false;
@@ -36,12 +39,7 @@ public class Board extends JPanel implements ActionListener {
     private void initBoard(Tetris parent) {
 
         setFocusable(true);
-        int DELAY = 400;
-        timer = new Timer(DELAY, this);
-        curPiece = new Shape();
-
         statusbar = parent.getStatusBar();
-        board = new Tetrominoe[BOARD_WIDTH * BOARD_HEIGHT];
         addKeyListener(new TAdapter());
     }
 
@@ -83,10 +81,16 @@ public class Board extends JPanel implements ActionListener {
         isStarted = true;
         isFallingFinished = false;
         numLinesRemoved = 0;
-        clearBoard();
 
+        curPiece = new Shape();
+        board = new Tetrominoe[BOARD_WIDTH * BOARD_HEIGHT];
+
+        clearBoard();
         newPiece();
-        timer.start();
+
+        timer = new Timer();
+        timer.scheduleAtFixedRate(new ScheduleTask(),
+                INITIAL_DELAY, PERIOD_INTERVAL);
     }
 
     private void pause() {
@@ -100,11 +104,12 @@ public class Board extends JPanel implements ActionListener {
 
         if (isPaused) {
 
-            timer.stop();
+            timer.cancel();
             statusbar.setText("paused");
         } else {
 
-            timer.start();
+            timer.scheduleAtFixedRate(new ScheduleTask(),
+                    INITIAL_DELAY, PERIOD_INTERVAL);
             statusbar.setText(String.valueOf(numLinesRemoved));
         }
 
@@ -210,7 +215,7 @@ public class Board extends JPanel implements ActionListener {
         if (!tryMove(curPiece, curX, curY)) {
 
             curPiece.setShape(Tetrominoe.NoShape);
-            timer.stop();
+            timer.cancel();
             isStarted = false;
 
             var msg = String.format("Game over. Score: %d", numLinesRemoved);
@@ -269,7 +274,7 @@ public class Board extends JPanel implements ActionListener {
                 for (int k = i; k < BOARD_HEIGHT - 1; k++) {
                     for (int j = 0; j < BOARD_WIDTH; j++) {
                         board[(k * BOARD_WIDTH) + j] = shapeAt(j, k + 1);
-                        }
+                    }
                 }
             }
         }
@@ -308,6 +313,38 @@ public class Board extends JPanel implements ActionListener {
                 x + squareWidth() - 1, y + 1);
     }
 
+    private class ScheduleTask extends TimerTask {
+
+        @Override
+        public void run() {
+
+            doGameCycle();
+        }
+    }
+
+    private void doGameCycle() {
+
+        update();
+        repaint();
+    }
+
+    private void update() {
+
+        if (isPaused) {
+
+            return;
+        }
+
+        if (isFallingFinished) {
+
+            isFallingFinished = false;
+            newPiece();
+        } else {
+
+            oneLineDown();
+        }
+    }
+
     class TAdapter extends KeyAdapter {
 
         @Override
@@ -336,7 +373,7 @@ public class Board extends JPanel implements ActionListener {
 
                 case KeyEvent.VK_LEFT -> tryMove(curPiece, curX - 1, curY);
                 case KeyEvent.VK_RIGHT -> tryMove(curPiece, curX + 1, curY);
-                case KeyEvent.VK_DOWN ->  tryMove(curPiece.rotateRight(), curX, curY);
+                case KeyEvent.VK_DOWN -> tryMove(curPiece.rotateRight(), curX, curY);
                 case KeyEvent.VK_UP -> tryMove(curPiece.rotateLeft(), curX, curY);
                 case KeyEvent.VK_SPACE -> dropDown();
                 case KeyEvent.VK_D -> oneLineDown();
