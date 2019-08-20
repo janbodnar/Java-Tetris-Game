@@ -4,18 +4,18 @@ import com.zetcode.Shape.Tetrominoe;
 
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.Timer;
 import java.awt.Color;
 import java.awt.Graphics;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
-import java.util.Timer;
-import java.util.TimerTask;
 
 public class Board extends JPanel {
 
     private final int BOARD_WIDTH = 10;
     private final int BOARD_HEIGHT = 22;
-    private final int INITIAL_DELAY = 100;
     private final int PERIOD_INTERVAL = 300;
 
     private Timer timer;
@@ -34,6 +34,8 @@ public class Board extends JPanel {
     }
 
     private void initBoard(Tetris parent) {
+
+        System.out.printf("init board %s", javax.swing.SwingUtilities.isEventDispatchThread());
 
         setFocusable(true);
         statusbar = parent.getStatusBar();
@@ -66,9 +68,8 @@ public class Board extends JPanel {
         clearBoard();
         newPiece();
 
-        timer = new Timer();
-        timer.scheduleAtFixedRate(new ScheduleTask(),
-                INITIAL_DELAY, PERIOD_INTERVAL);
+        timer = new Timer(PERIOD_INTERVAL, new GameCycle());
+        timer.start();
     }
 
     private void pause() {
@@ -185,7 +186,7 @@ public class Board extends JPanel {
         if (!tryMove(curPiece, curX, curY)) {
 
             curPiece.setShape(Tetrominoe.NoShape);
-            timer.cancel();
+            timer.stop();
 
             var msg = String.format("Game over. Score: %d", numLinesRemoved);
             statusbar.setText(msg);
@@ -282,10 +283,10 @@ public class Board extends JPanel {
                 x + squareWidth() - 1, y + 1);
     }
 
-    private class ScheduleTask extends TimerTask {
+    private class GameCycle implements ActionListener {
 
         @Override
-        public void run() {
+        public void actionPerformed(ActionEvent e) {
 
             doGameCycle();
         }
@@ -293,6 +294,7 @@ public class Board extends JPanel {
 
     private void doGameCycle() {
 
+        System.out.printf("game cycle %s%n", javax.swing.SwingUtilities.isEventDispatchThread());
         update();
         repaint();
     }
