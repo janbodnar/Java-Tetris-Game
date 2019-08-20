@@ -57,9 +57,6 @@ public class Board extends JPanel {
 
     void start() {
 
-        isFallingFinished = false;
-        numLinesRemoved = 0;
-
         curPiece = new Shape();
         board = new Tetrominoe[BOARD_WIDTH * BOARD_HEIGHT];
 
@@ -292,6 +289,7 @@ public class Board extends JPanel {
 
     private void doGameCycle() {
 
+        System.out.printf("game cycle %s%n", javax.swing.SwingUtilities.isEventDispatchThread());
         update();
         repaint();
     }
