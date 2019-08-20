@@ -289,7 +289,6 @@ public class Board extends JPanel {
 
     private void doGameCycle() {
 
-        System.out.printf("game cycle %s%n", javax.swing.SwingUtilities.isEventDispatchThread());
         update();
         repaint();
     }
