@@ -2,15 +2,14 @@ package com.zetcode;
 
 import com.zetcode.Shape.Tetrominoe;
 
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.Timer;
-import java.awt.Color;
-import java.awt.Graphics;
+import javax.swing.*;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.util.Collections;
+import java.util.LinkedList;
 
 public class Board extends JPanel {
 
@@ -27,6 +26,7 @@ public class Board extends JPanel {
     private JLabel statusbar;
     private Shape curPiece;
     private Tetrominoe[] board;
+    private LinkedList<Shape> pieceBag;
 
     public Board(Tetris parent) {
 
@@ -59,6 +59,7 @@ public class Board extends JPanel {
 
         curPiece = new Shape();
         board = new Tetrominoe[BOARD_WIDTH * BOARD_HEIGHT];
+        pieceBag = new LinkedList<>();
 
         clearBoard();
         newPiece();
@@ -174,7 +175,10 @@ public class Board extends JPanel {
 
     private void newPiece() {
 
-        curPiece.setRandomShape();
+        while ((curPiece = pieceBag.poll()) == null) {
+            newBag();
+        }
+
         curX = BOARD_WIDTH / 2 + 1;
         curY = BOARD_HEIGHT - 1 + curPiece.minY();
 
@@ -188,8 +192,15 @@ public class Board extends JPanel {
         }
     }
 
-    private boolean tryMove(Shape newPiece, int newX, int newY) {
+    private void newBag() {
+        for (Tetrominoe tetrominoe : Tetrominoe.values()) {
+            if (tetrominoe.equals(Tetrominoe.NoShape)) continue;
+            pieceBag.offer((new Shape()).setShape(tetrominoe));
+        }
+        Collections.shuffle(pieceBag);
+    }
 
+    private boolean tryMove(Shape newPiece, int newX, int newY) {
         for (int i = 0; i < 4; i++) {
 
             int x = newX + newPiece.x(i);
@@ -256,7 +267,7 @@ public class Board extends JPanel {
 
     private void drawSquare(Graphics g, int x, int y, Tetrominoe shape) {
 
-        Color colors[] = {new Color(0, 0, 0), new Color(204, 102, 102),
+        Color[] colors = {new Color(0, 0, 0), new Color(204, 102, 102),
                 new Color(102, 204, 102), new Color(102, 102, 204),
                 new Color(204, 204, 102), new Color(204, 102, 204),
                 new Color(102, 204, 204), new Color(218, 170, 0)
@@ -328,10 +339,9 @@ public class Board extends JPanel {
                 case KeyEvent.VK_P -> pause();
                 case KeyEvent.VK_LEFT -> tryMove(curPiece, curX - 1, curY);
                 case KeyEvent.VK_RIGHT -> tryMove(curPiece, curX + 1, curY);
-                case KeyEvent.VK_DOWN -> tryMove(curPiece.rotateRight(), curX, curY);
-                case KeyEvent.VK_UP -> tryMove(curPiece.rotateLeft(), curX, curY);
+                case KeyEvent.VK_DOWN -> tryMove(curPiece.rotateLeft(), curX, curY);
+                case KeyEvent.VK_UP -> tryMove(curPiece.rotateRight(), curX, curY);
                 case KeyEvent.VK_SPACE -> dropDown();
-                case KeyEvent.VK_D -> oneLineDown();
             }
         }
     }

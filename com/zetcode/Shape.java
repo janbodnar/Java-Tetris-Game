@@ -8,7 +8,7 @@ public class Shape {
         TShape, SquareShape, LShape, MirroredLShape }
 
     private Tetrominoe pieceShape;
-    private int coords[][];
+    private int[][] coords;
     private int[][][] coordsTable;
 
 
@@ -35,17 +35,15 @@ public class Shape {
         setShape(Tetrominoe.NoShape);
     }
 
-    protected void setShape(Tetrominoe shape) {
+    protected Shape setShape(Tetrominoe shape) {
 
-        for (int i = 0; i < 4 ; i++) {
+        for (int i = 0; i < 4; i++) {
 
-            for (int j = 0; j < 2; ++j) {
-
-                coords[i][j] = coordsTable[shape.ordinal()][i][j];
-            }
+            System.arraycopy(coordsTable[shape.ordinal()][i], 0, coords[i], 0, 2);
         }
 
         pieceShape = shape;
+        return this;
     }
 
     private void setX(int index, int x) { coords[index][0] = x; }
