@@ -9,7 +9,7 @@ import javax.swing.JLabel;
 Java Tetris game clone
 
 Author: Jan Bodnar
-Website: http://zetcode.com
+Website: https://zetcode.com
  */
 public class Tetris extends JFrame {
 
