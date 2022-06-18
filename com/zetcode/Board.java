@@ -55,7 +55,7 @@ public class Board extends JPanel {
         return board[(y * BOARD_WIDTH) + x];
     }
 
-    void start() {
+    private void start() {
 
         curPiece = new Shape();
         board = new Tetrominoe[BOARD_WIDTH * BOARD_HEIGHT];
